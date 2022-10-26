@@ -2,38 +2,32 @@ import { Button, Checkbox, Link, Snackbar, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
-import styles from "./LoginCard.module.css";
+import styles from "./SignUpCard.module.css";
 import { regexEmailTest } from "../../constants/regex";
 import { AuthContext } from "../../contexts/auth/auth.context";
 import googleIcon from "../../public/assets/google_icon.svg";
 import { EmailButton } from "../email-button/EmailButton";
+
 import { CustomInputFieldComponent } from "../custom-input-field/CustomInputField";
 
-export const LoginCard = () => {
+export const SignUpCard = () => {
   // Router
   const router = useRouter();
 
   // Context
-  const { user, login, verify, signInWithGithub, signInWithGoogle } =
+  const { user, signup, verify, signInWithGithub, signInWithGoogle } =
     useContext(AuthContext);
 
   // States
-  const [email, setEmail] = useState<string | null>("");
-  const [password, setPassword] = useState<string | null>("");
-  const [isChecked, setIsChecked] = useState(false);
-
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmedPassword, setConfirmedPassword] = useState<string>("");
 
   const handleErrors = async () => {
     let hasError = false;
     if (!email || !regexEmailTest.test(email)) {
-      setSnackbarMessage("Please enter a valid email address.");
-      setSnackbarOpen(true);
       hasError = true;
     } else if (!password) {
-      setSnackbarMessage("Please enter a password with 8 or more characters.");
-      setSnackbarOpen(true);
       hasError = true;
     }
     return hasError;
@@ -47,15 +41,10 @@ export const LoginCard = () => {
     }
 
     try {
-      await login({
-        email: email ?? "",
-        password: password ?? "",
-      });
+      await signup({ email, password });
+      await verify();
     } catch (error) {
       console.error(error);
-    }
-    if (user?.emailVerified === false) {
-      await verify();
     }
   };
 
@@ -68,13 +57,7 @@ export const LoginCard = () => {
 
   return (
     <div className={styles.card}>
-      {/* <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={SNACKBAR_AUTO_DURATION}
-        onClose={handleSnackbarClose}
-        message={snackbarMessage}
-      /> */}
-      <Typography variant="h3">Log in</Typography>
+      <Typography variant="h3">Sign Up</Typography>
 
       <div className={styles.innerContainer}>
         <EmailButton onClick={handleGoogleLogin} fullWidth>
@@ -87,21 +70,27 @@ export const LoginCard = () => {
 
       <div className={styles.innerContainer}>
         <CustomInputFieldComponent
-          fullwidth
+          fullWidth
           placeholder="Email"
           onChange={(e: any) => {
             setEmail(e.target.value);
           }}
-          sx={{ width: "100%" }}
         />
         <CustomInputFieldComponent
-          fullwidth
+          fullWidth
           placeholder="Password"
           type="password"
           onChange={(e: any) => {
             setPassword(e.target.value);
           }}
-          sx={{ width: "100%" }}
+        />
+        <CustomInputFieldComponent
+          fullWidth
+          placeholder="Re-enter Password"
+          type="password"
+          onChange={(e: any) => {
+            setConfirmedPassword(e.target.value);
+          }}
         />
       </div>
 
@@ -110,12 +99,17 @@ export const LoginCard = () => {
         sx={{ borderRadius: "10px" }}
         onClick={handleRegularLogin}
         fullWidth
+        disabled={
+          !regexEmailTest.test(email ?? "") ||
+          password.length < 8 ||
+          password !== confirmedPassword
+        }
       >
-        Log in
+        Sign Up
       </Button>
       <div className={styles.bottomButtons}>
-        <Link sx={{ textDecoration: "none" }} href="/signup">
-          Sign Up
+        <Link sx={{ textDecoration: "none" }} href="/login">
+          Log in
         </Link>
         <Link sx={{ textDecoration: "none" }} href="/reset-password">
           Forgot your password?
