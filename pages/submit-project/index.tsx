@@ -3,9 +3,10 @@ import Image from "next/image";
 import { LoginCard } from "../../components/login-card/LoginCard";
 import { SignUpCard } from "../../components/signup-card/SignUpCard";
 import { SubmitProjectForm } from "../../components/submit-project-form/SubmitProjectForm";
+import { withProtected } from "../../hooks/route";
 import styles from "../../styles/Home.module.css";
 
-export default function Home() {
+function Home() {
   return (
     <div>
       <Head>
@@ -23,3 +24,6 @@ export default function Home() {
     </div>
   );
 }
+
+// export default withProtected(Home);
+export default Home;
