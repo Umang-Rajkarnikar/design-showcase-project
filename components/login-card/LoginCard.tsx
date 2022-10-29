@@ -87,7 +87,7 @@ export const LoginCard = () => {
 
       <div className={styles.innerContainer}>
         <CustomInputFieldComponent
-          fullwidth
+          fullWidth
           placeholder="Email"
           onChange={(e: any) => {
             setEmail(e.target.value);
@@ -95,7 +95,7 @@ export const LoginCard = () => {
           sx={{ width: "100%" }}
         />
         <CustomInputFieldComponent
-          fullwidth
+          fullWidth
           placeholder="Password"
           type="password"
           onChange={(e: any) => {
