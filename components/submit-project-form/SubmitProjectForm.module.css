@@ -1,0 +1,23 @@
+.container {
+  width: 100%;
+  max-width: 900px;
+}
+
+.formSectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.imageContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
